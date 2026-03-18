@@ -1,12 +1,25 @@
 {
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/images/*", "/css/*", "/js/*"]
-  },
+  "routes": [
+    {
+      "route": "/*",
+      "allowedRoles": ["authenticated"]
+    }
+  ],
   "responseOverrides": {
+    "401": {
+      "statusCode": 302,
+      "redirect": "/.auth/login/github"
+    },
+    "403": {
+      "rewrite": "/403.html"
+    },
     "404": {
       "rewrite": "/index.html"
     }
+  },
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*", "/css/*", "/js/*"]
   },
   "globalHeaders": {
     "X-Frame-Options": "DENY",
