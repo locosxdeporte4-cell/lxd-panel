@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LPD Panel RTMP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>LPD Panel RTMP</h1>
+    <p>Control central de transmisiones</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Estado general</h2>
+      <div class="status-grid">
+        <div class="status-item">
+          <span class="label">Servidor Linux</span>
+          <span class="value online">Online</span>
+        </div>
+        <div class="status-item">
+          <span class="label">YouTube</span>
+          <span class="value unknown">Sin validar</span>
+        </div>
+        <div class="status-item">
+          <span class="label">Facebook</span>
+          <span class="value unknown">Sin validar</span>
+        </div>
+        <div class="status-item">
+          <span class="label">Instagram</span>
+          <span class="value unknown">Sin validar</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Evento actual</h2>
+      <form class="form-grid">
+        <div>
+          <label for="titulo">Título</label>
+          <input id="titulo" type="text" placeholder="Curicó Unido vs Rangers" />
+        </div>
+
+        <div>
+          <label for="fecha">Fecha</label>
+          <input id="fecha" type="date" />
+        </div>
+
+        <div>
+          <label for="hora">Hora</label>
+          <input id="hora" type="time" />
+        </div>
+
+        <div class="full">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" rows="4" placeholder="Transmisión oficial..."></textarea>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Controles</h2>
+      <div class="button-grid">
+        <button>Iniciar YouTube</button>
+        <button>Detener YouTube</button>
+        <button>Iniciar Facebook</button>
+        <button>Detener Facebook</button>
+        <button>Iniciar Instagram</button>
+        <button>Detener Instagram</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Logs</h2>
+      <div class="logs">
+        <p>[INFO] Panel cargado correctamente.</p>
+        <p>[INFO] Esperando integración con API.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
