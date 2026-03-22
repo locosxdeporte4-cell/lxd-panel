@@ -3,82 +3,355 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LPD Panel RTMP</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>LPD | Portal de Transmisiones</title>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <h1>LPD Panel RTMP</h1>
-    <p>Control central de transmisiones</p>
-  </header>
-
-  <main class="container">
-    <section class="card">
-      <h2>Estado general</h2>
-      <div class="status-grid">
-        <div class="status-item">
-          <span class="label">Servidor Linux</span>
-          <span class="value online">Online</span>
-        </div>
-        <div class="status-item">
-          <span class="label">YouTube</span>
-          <span class="value unknown">Sin validar</span>
-        </div>
-        <div class="status-item">
-          <span class="label">Facebook</span>
-          <span class="value unknown">Sin validar</span>
-        </div>
-        <div class="status-item">
-          <span class="label">Instagram</span>
-          <span class="value unknown">Sin validar</span>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">LPD</div>
+        <div>
+          <h1>Portal de Transmisiones</h1>
+          <p>Centro de operación multired</p>
         </div>
       </div>
-    </section>
 
-    <section class="card">
-      <h2>Evento actual</h2>
-      <form class="form-grid">
-        <div>
-          <label for="titulo">Título</label>
-          <input id="titulo" type="text" placeholder="Curicó Unido vs Rangers" />
+      <nav class="nav">
+        <button class="nav-link active" data-section="dashboard">Dashboard</button>
+        <button class="nav-link" data-section="platforms">Plataformas</button>
+        <button class="nav-link" data-section="logs">Logs</button>
+        <button class="nav-link" data-section="settings">Configuración</button>
+      </nav>
+
+      <div class="sidebar-status">
+        <h3>Estado rápido</h3>
+        <div class="mini-status">
+          <span>Servidor</span>
+          <strong id="quick-server-status" class="status-pill online">Encendido</strong>
         </div>
-
-        <div>
-          <label for="fecha">Fecha</label>
-          <input id="fecha" type="date" />
+        <div class="mini-status">
+          <span>RTMP</span>
+          <strong id="quick-rtmp-status" class="status-pill online">Activo</strong>
         </div>
-
-        <div>
-          <label for="hora">Hora</label>
-          <input id="hora" type="time" />
+        <div class="mini-status">
+          <span>Señal OBS</span>
+          <strong id="quick-obs-status" class="status-pill warning">Inestable</strong>
         </div>
-
-        <div class="full">
-          <label for="descripcion">Descripción</label>
-          <textarea id="descripcion" rows="4" placeholder="Transmisión oficial..."></textarea>
-        </div>
-      </form>
-    </section>
-
-    <section class="card">
-      <h2>Controles</h2>
-      <div class="button-grid">
-        <button>Iniciar YouTube</button>
-        <button>Detener YouTube</button>
-        <button>Iniciar Facebook</button>
-        <button>Detener Facebook</button>
-        <button>Iniciar Instagram</button>
-        <button>Detener Instagram</button>
       </div>
-    </section>
+    </aside>
 
-    <section class="card">
-      <h2>Logs</h2>
-      <div class="logs">
-        <p>[INFO] Panel cargado correctamente.</p>
-        <p>[INFO] Esperando integración con API.</p>
-      </div>
-    </section>
-  </main>
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2>Panel principal</h2>
+          <p>Monitoreo y control de transmisiones en YouTube, Facebook, Instagram, Twitch y Kick.</p>
+        </div>
+
+        <div class="top-actions">
+          <button class="btn btn-secondary" id="btn-refresh">Actualizar estado</button>
+          <button class="btn btn-primary" id="btn-open-master-log">Ver log general</button>
+        </div>
+      </header>
+
+      <section id="section-dashboard" class="content-section active">
+        <div class="cards-grid summary-grid">
+          <article class="summary-card">
+            <h3>Servidor</h3>
+            <p class="big-value" id="server-state-text">Encendido</p>
+            <span class="hint">VM Azure / backend operativo</span>
+          </article>
+
+          <article class="summary-card">
+            <h3>RTMP</h3>
+            <p class="big-value" id="rtmp-state-text">Activo</p>
+            <span class="hint">nginx-rtmp / ingest</span>
+          </article>
+
+          <article class="summary-card">
+            <h3>Señal entrante</h3>
+            <p class="big-value" id="signal-state-text">Inestable</p>
+            <span class="hint">fuente desde estadio / OBS</span>
+          </article>
+
+          <article class="summary-card">
+            <h3>Redes activas</h3>
+            <p class="big-value" id="active-platforms-count">2 / 5</p>
+            <span class="hint">salidas actualmente en línea</span>
+          </article>
+        </div>
+
+        <div class="layout-2col">
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Plataformas</h3>
+              <p>Acceso rápido a cada módulo</p>
+            </div>
+
+            <div class="platform-grid">
+              <button class="platform-card youtube" data-platform="youtube">
+                <div class="platform-top">
+                  <h4>YouTube</h4>
+                  <span class="status-pill online">Activo</span>
+                </div>
+                <p>Módulo especial con flujos scheduled y new.</p>
+              </button>
+
+              <button class="platform-card facebook" data-platform="facebook">
+                <div class="platform-top">
+                  <h4>Facebook</h4>
+                  <span class="status-pill offline">Detenido</span>
+                </div>
+                <p>Inicio, detención y futura gestión de claves.</p>
+              </button>
+
+              <button class="platform-card instagram" data-platform="instagram">
+                <div class="platform-top">
+                  <h4>Instagram</h4>
+                  <span class="status-pill offline">Detenido</span>
+                </div>
+                <p>RTMP con llave dinámica y control manual.</p>
+              </button>
+
+              <button class="platform-card twitch" data-platform="twitch">
+                <div class="platform-top">
+                  <h4>Twitch</h4>
+                  <span class="status-pill online">Activo</span>
+                </div>
+                <p>Salida directa con control desde panel.</p>
+              </button>
+
+              <button class="platform-card kick" data-platform="kick">
+                <div class="platform-top">
+                  <h4>Kick</h4>
+                  <span class="status-pill offline">Detenido</span>
+                </div>
+                <p>Módulo preparado para integración futura.</p>
+              </button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <h3>Actividad reciente</h3>
+              <p>Resumen operacional</p>
+            </div>
+
+            <div id="activity-feed" class="feed">
+              <div class="feed-item">
+                <span class="feed-time">22:11</span>
+                <div>
+                  <strong>YouTube</strong>
+                  <p>push-youtube activo y FFmpeg corriendo.</p>
+                </div>
+              </div>
+
+              <div class="feed-item">
+                <span class="feed-time">22:09</span>
+                <div>
+                  <strong>RTMP</strong>
+                  <p>Se detecta señal inestable en la entrada principal.</p>
+                </div>
+              </div>
+
+              <div class="feed-item">
+                <span class="feed-time">22:05</span>
+                <div>
+                  <strong>Twitch</strong>
+                  <p>Salida activa confirmada.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="section-platforms" class="content-section">
+        <div class="platform-layout">
+          <aside class="platform-list">
+            <button class="platform-menu-item active" data-platform-panel="youtube">YouTube</button>
+            <button class="platform-menu-item" data-platform-panel="facebook">Facebook</button>
+            <button class="platform-menu-item" data-platform-panel="instagram">Instagram</button>
+            <button class="platform-menu-item" data-platform-panel="twitch">Twitch</button>
+            <button class="platform-menu-item" data-platform-panel="kick">Kick</button>
+          </aside>
+
+          <div class="platform-detail">
+
+            <!-- YOUTUBE -->
+            <section class="platform-panel active" id="panel-youtube">
+              <div class="panel-header">
+                <div>
+                  <h3>YouTube</h3>
+                  <p>Módulo especial con flujos excluyentes</p>
+                </div>
+                <span class="status-pill online">Activo</span>
+              </div>
+
+              <div class="mode-selector">
+                <button class="mode-btn active" data-youtube-mode="scheduled">Modo scheduled</button>
+                <button class="mode-btn" data-youtube-mode="new">Modo new</button>
+              </div>
+
+              <div class="youtube-mode-panel active" id="yt-mode-scheduled">
+                <div class="info-box warning-box">
+                  <strong>Regla operacional:</strong>
+                  <span>este flujo usa evento ya creado en YouTube Studio. No mezclar con el flujo new.</span>
+                </div>
+
+                <div class="action-grid">
+                  <button class="btn btn-secondary action-btn" data-action="yt-list-events">Listar eventos programados</button>
+                  <button class="btn btn-primary action-btn" data-action="yt-start-push">Start push-youtube</button>
+                  <button class="btn btn-secondary action-btn" data-action="yt-validate-ffmpeg">Validar FFmpeg</button>
+                  <button class="btn btn-danger action-btn" data-action="yt-go-live-scheduled">Pasar a LIVE</button>
+                </div>
+              </div>
+
+              <div class="youtube-mode-panel" id="yt-mode-new">
+                <div class="info-box warning-box">
+                  <strong>Regla operacional:</strong>
+                  <span>este flujo crea un broadcast nuevo por API. No mezclar con scheduled.</span>
+                </div>
+
+                <div class="action-grid">
+                  <button class="btn btn-primary action-btn" data-action="yt-start-push-new">Start push-youtube</button>
+                  <button class="btn btn-secondary action-btn" data-action="yt-create-broadcast">Crear broadcast por API</button>
+                  <button class="btn btn-danger action-btn" data-action="yt-go-live-new">Ejecutar go_live.py</button>
+                </div>
+              </div>
+
+              <div class="subsection">
+                <h4>Detención YouTube</h4>
+                <div class="action-grid">
+                  <button class="btn btn-secondary action-btn" data-action="yt-stop-live">stop_youtube_live.py</button>
+                  <button class="btn btn-danger action-btn" data-action="yt-stop-push">Stop push-youtube</button>
+                  <button class="btn btn-secondary action-btn" data-action="yt-validate-stop">Validar FFmpeg</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- FACEBOOK -->
+            <section class="platform-panel" id="panel-facebook">
+              <div class="panel-header">
+                <div>
+                  <h3>Facebook</h3>
+                  <p>Módulo operativo independiente</p>
+                </div>
+                <span class="status-pill offline">Detenido</span>
+              </div>
+
+              <div class="action-grid">
+                <button class="btn btn-primary action-btn" data-action="fb-start">Iniciar transmisión</button>
+                <button class="btn btn-danger action-btn" data-action="fb-stop">Detener transmisión</button>
+                <button class="btn btn-secondary action-btn" data-action="fb-status">Validar estado</button>
+                <button class="btn btn-secondary action-btn" data-action="fb-key">Cambiar clave</button>
+              </div>
+
+              <div class="subsection">
+                <h4>Observaciones</h4>
+                <p class="muted">
+                  Este módulo debe conectarse luego a Logic Apps o backend equivalente para start/stop/status/key.
+                </p>
+              </div>
+            </section>
+
+            <!-- INSTAGRAM -->
+            <section class="platform-panel" id="panel-instagram">
+              <div class="panel-header">
+                <div>
+                  <h3>Instagram</h3>
+                  <p>RTMP con llave variable</p>
+                </div>
+                <span class="status-pill offline">Detenido</span>
+              </div>
+
+              <div class="action-grid">
+                <button class="btn btn-primary action-btn" data-action="ig-start">Iniciar transmisión</button>
+                <button class="btn btn-danger action-btn" data-action="ig-stop">Detener transmisión</button>
+                <button class="btn btn-secondary action-btn" data-action="ig-status">Validar estado</button>
+                <button class="btn btn-secondary action-btn" data-action="ig-key">Actualizar llave</button>
+              </div>
+            </section>
+
+            <!-- TWITCH -->
+            <section class="platform-panel" id="panel-twitch">
+              <div class="panel-header">
+                <div>
+                  <h3>Twitch</h3>
+                  <p>Salida directa con control básico</p>
+                </div>
+                <span class="status-pill online">Activo</span>
+              </div>
+
+              <div class="action-grid">
+                <button class="btn btn-primary action-btn" data-action="tw-start">Iniciar transmisión</button>
+                <button class="btn btn-danger action-btn" data-action="tw-stop">Detener transmisión</button>
+                <button class="btn btn-secondary action-btn" data-action="tw-status">Validar estado</button>
+                <button class="btn btn-secondary action-btn" data-action="tw-key">Cambiar clave</button>
+              </div>
+            </section>
+
+            <!-- KICK -->
+            <section class="platform-panel" id="panel-kick">
+              <div class="panel-header">
+                <div>
+                  <h3>Kick</h3>
+                  <p>Módulo preparado para expansión</p>
+                </div>
+                <span class="status-pill offline">Detenido</span>
+              </div>
+
+              <div class="action-grid">
+                <button class="btn btn-primary action-btn" data-action="kick-start">Iniciar transmisión</button>
+                <button class="btn btn-danger action-btn" data-action="kick-stop">Detener transmisión</button>
+                <button class="btn btn-secondary action-btn" data-action="kick-status">Validar estado</button>
+                <button class="btn btn-secondary action-btn" data-action="kick-key">Cambiar clave</button>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </section>
+
+      <section id="section-logs" class="content-section">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Log general</h3>
+            <p>Salida del frontend mientras no exista backend real</p>
+          </div>
+
+          <div id="master-log" class="log-box"></div>
+        </div>
+      </section>
+
+      <section id="section-settings" class="content-section">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Configuración base</h3>
+            <p>Placeholder para futuras variables globales</p>
+          </div>
+
+          <div class="settings-grid">
+            <div class="setting-card">
+              <h4>Backend base URL</h4>
+              <p class="muted">Aquí después irá la URL de Azure Function / API.</p>
+            </div>
+
+            <div class="setting-card">
+              <h4>Estado autenticación</h4>
+              <p class="muted">Temporalmente desactivada para acelerar desarrollo.</p>
+            </div>
+
+            <div class="setting-card">
+              <h4>Modo operativo</h4>
+              <p class="muted">Diseño orientado a multired, no centrado solo en YouTube.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
 </body>
 </html>
