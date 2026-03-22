@@ -154,7 +154,7 @@ async function simulateAction(action) {
       throw new Error(data.error || "Error desconocido");
     }
 
-    writeLog("push-youtube iniciado correctamente");
+    writeLog(`YouTube: ${data.message}`);
   } catch (err) {
     writeLog(`Error iniciando push-youtube: ${err.message}`, "ERROR");
   }

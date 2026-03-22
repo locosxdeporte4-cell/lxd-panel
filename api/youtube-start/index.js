@@ -6,7 +6,7 @@ module.exports = async function (context, req) {
     },
     body: {
       ok: true,
-      message: "Endpoint youtube-start funcionando"
+      message: "Solicitud recibida para iniciar push-youtube"
     }
   };
 };

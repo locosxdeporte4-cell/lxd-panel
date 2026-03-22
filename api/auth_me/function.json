@@ -6,8 +6,8 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["post"],
-      "route": "youtube-start"
+      "methods": ["get"],
+      "route": "auth/me"
     },
     {
       "type": "http",

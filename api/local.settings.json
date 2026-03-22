@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AZURE_FUNCTIONS_ENVIRONMENT": "Development",
+    "LPD_ADMIN_USER": "admin",
+    "LPD_ADMIN_PASS": "1234",
+    "LPD_SESSION_SECRET": "clave_super_larga_123456789",
+    "LPD_SESSION_HOURS": "12"
+  }
+}
