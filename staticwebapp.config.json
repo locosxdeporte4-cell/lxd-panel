@@ -1,4 +1,7 @@
 {
+  "platform": {
+    "apiRuntime": "python:3.11"
+  },
   "routes": [
     {
       "route": "/*",
@@ -6,20 +9,13 @@
     }
   ],
   "responseOverrides": {
-    "401": {
-      "statusCode": 302,
-      "redirect": "/.auth/login/github"
-    },
     "403": {
       "rewrite": "/403.html"
-    },
-    "404": {
-      "rewrite": "/index.html"
     }
   },
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/images/*", "/css/*", "/js/*"]
+    "exclude": ["/images/*", "/css/*", "/js/*", "/api/*"]
   },
   "globalHeaders": {
     "X-Frame-Options": "DENY",
