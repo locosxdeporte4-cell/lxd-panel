@@ -93,11 +93,30 @@ def build_set_cookie_header(token: str) -> str:
     env_name = os.getenv("AZURE_FUNCTIONS_ENVIRONMENT", "").lower()
     is_local = env_name == "development"
 
-    secure_part = "" if is_local else "Secure; "
+    if is_local:
+        return (
+            f"{COOKIE_NAME}={token}; "
+            f"Path=/; Max-Age={max_age}; HttpOnly; SameSite=Lax"
+        )
 
     return (
         f"{COOKIE_NAME}={token}; "
-        f"Path=/; Max-Age={max_age}; HttpOnly; {secure_part}SameSite=Lax"
+        f"Path=/; Max-Age={max_age}; HttpOnly; Secure; SameSite=None"
+    )
+
+def build_clear_cookie_header() -> str:
+    env_name = os.getenv("AZURE_FUNCTIONS_ENVIRONMENT", "").lower()
+    is_local = env_name == "development"
+
+    if is_local:
+        return (
+            f"{COOKIE_NAME}=; "
+            f"Path=/; Max-Age=0; HttpOnly; SameSite=Lax"
+        )
+
+    return (
+        f"{COOKIE_NAME}=; "
+        f"Path=/; Max-Age=0; HttpOnly; Secure; SameSite=None"
     )
 
 def build_clear_cookie_header() -> str:
