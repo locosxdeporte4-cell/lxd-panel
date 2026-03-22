@@ -6,10 +6,10 @@ module.exports = async function (context, req) {
     },
     body: {
       ok: true,
-      server: "Encendido",
-      rtmp: "Activo",
-      signal: "Inestable",
-      activePlatforms: ["youtube", "twitch"],
+      server: "Apagado",
+      rtmp: "Detenido",
+      signal: "Estable",
+      activePlatforms: ["youtube"],
       timestamp: new Date().toISOString()
     }
   };
