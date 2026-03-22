@@ -88,20 +88,14 @@ def get_session_from_headers(headers: dict) -> Tuple[bool, Optional[dict]]:
         return False, None
     return verify_session_token(token)
 
-def build_set_cookie_header(token: str) -> str:
-    max_age = int(os.getenv("LPD_SESSION_HOURS", "12")) * 3600
-    env_name = os.getenv("AZURE_FUNCTIONS_ENVIRONMENT", "").lower()
-    is_local = env_name == "development"
-
-    if is_local:
-        return (
-            f"{COOKIE_NAME}={token}; "
-            f"Path=/; Max-Age={max_age}; HttpOnly; SameSite=None"
-        )
-
+ddef build_set_cookie_header(token: str, max_age: int = 60 * 60 * 12) -> str:
     return (
-        f"{COOKIE_NAME}={token}; "
-        f"Path=/; Max-Age={max_age}; HttpOnly; Secure; SameSite=None"
+        f"lpd_session={token}; "
+        f"Path=/; "
+        f"Max-Age={max_age}; "
+        f"HttpOnly; "
+        f"Secure; "
+        f"SameSite=Lax"
     )
 
 def build_clear_cookie_header() -> str:
