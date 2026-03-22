@@ -89,8 +89,30 @@ modeButtons.forEach(btn => {
   });
 });
 
-document.getElementById("btn-refresh").addEventListener("click", () => {
-  writeLog("Solicitud manual de actualización de estado ejecutada.");
+document.getElementById("btn-refresh").addEventListener("click", async () => {
+  try {
+    writeLog("Consultando estado general del sistema...");
+
+    const response = await fetch("/api/system/status");
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    document.getElementById("server-state-text").textContent = data.server;
+    document.getElementById("rtmp-state-text").textContent = data.rtmp;
+    document.getElementById("signal-state-text").textContent = data.signal;
+    document.getElementById("active-platforms-count").textContent =
+      `${data.activePlatforms.length} / 5`;
+
+    writeLog(
+      `Estado actualizado. Servidor=${data.server}, RTMP=${data.rtmp}, Señal=${data.signal}.`
+    );
+  } catch (error) {
+    writeLog(`Error consultando estado general: ${error.message}`, "ERROR");
+  }
 });
 
 document.getElementById("btn-open-master-log").addEventListener("click", () => {
