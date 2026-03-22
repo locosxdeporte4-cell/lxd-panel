@@ -96,7 +96,7 @@ def build_set_cookie_header(token: str) -> str:
     if is_local:
         return (
             f"{COOKIE_NAME}={token}; "
-            f"Path=/; Max-Age={max_age}; HttpOnly; SameSite=Lax"
+            f"Path=/; Max-Age={max_age}; HttpOnly; SameSite=None"
         )
 
     return (
