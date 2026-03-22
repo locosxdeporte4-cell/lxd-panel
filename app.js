@@ -131,7 +131,7 @@ function guardYouTubeMode(expectedMode, actionName) {
   return true;
 }
 
-function simulateAction(action) {
+async function simulateAction(action) {
   switch (action) {
     case "yt-list-events":
       if (!guardYouTubeMode("scheduled", action)) return;
@@ -139,9 +139,27 @@ function simulateAction(action) {
       break;
 
     case "yt-start-push":
-      if (!guardYouTubeMode("scheduled", action)) return;
-      writeLog("YouTube scheduled: start push-youtube.");
-      break;
+  if (!guardYouTubeMode("scheduled", action)) return;
+
+  try {
+    writeLog("YouTube scheduled: iniciando push-youtube...");
+
+    const res = await fetch("/api/youtube-start", {
+      method: "POST"
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Error desconocido");
+    }
+
+    writeLog("push-youtube iniciado correctamente");
+  } catch (err) {
+    writeLog(`Error iniciando push-youtube: ${err.message}`, "ERROR");
+  }
+
+  break;
 
     case "yt-validate-ffmpeg":
       if (!guardYouTubeMode("scheduled", action)) return;
@@ -239,8 +257,8 @@ function simulateAction(action) {
 }
 
 actionButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    simulateAction(btn.dataset.action);
+  btn.addEventListener("click", async () => {
+    await simulateAction(btn.dataset.action);
   });
 });
 
